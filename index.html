@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Controle do ESP32</title>
+    <script>
+        const esp32IP = "192.168.57.181"; 
+
+        function sendRequest(endpoint) {
+            fetch(`http://${esp32IP}${endpoint}`)
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById("status").innerText = data; 
+                })
+                .catch(error => console.error("Erro:", error));
+        }
+
+        function sendCommand(command) {
+            sendRequest(`/${command}`);
+        }
+
+        function abrirServo1() {
+            sendCommand('servo1');
+        }
+
+        function fecharServo1() {
+            sendCommand('servo1off');
+        }
+
+        function abrirServo2() {
+            sendCommand('servo2');
+        }
+
+        function fecharServo2() {
+            sendCommand('servo2off');
+        }
+
+        function ligarLEDsGaragem() {
+            sendCommand('garageon');
+        }
+
+        function desligarLEDsGaragem() {
+            sendCommand('garageoff');
+        }
+
+        function ligarLEDsSuperiores() {
+            sendCommand('topon');
+        }
+
+        function desligarLEDsSuperiores() {
+            sendCommand('topoff');
+        }
+    </script>
+</head>
+<body>
+
+<h1>Controle do ESP32</h1>
+
+<div class="container">
+    <div>
+        <h2>Portão 1</h2>
+        <button onclick="abrirServo1()">Abrir Servo 1</button>
+        <button onclick="fecharServo1()">Fechar Servo 1</button>
+    </div>
+    
+    <div>
+        <h2>Portão 2</h2>
+        <button onclick="abrirServo2()">Abrir Servo 2</button>
+        <button onclick="fecharServo2()">Fechar Servo 2</button>
+    </div>
+
+    <div>
+        <h2>LEDs da Garagem</h2>
+        <button onclick="ligarLEDsGaragem()">Ligar LEDs Garagem</button>
+        <button onclick="desligarLEDsGaragem()">Desligar LEDs Garagem</button>
+    </div>
+
+    <div>
+        <h2>LEDs Superiores</h2>
+        <button onclick="ligarLEDsSuperiores()">Ligar LEDs Superiores</button>
+        <button onclick="desligarLEDsSuperiores()">Desligar LEDs Superiores</button>
+    </div>
+</div>
+
+<div id="status"></div>
+
+</body>
+</html>
