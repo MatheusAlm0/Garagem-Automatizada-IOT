@@ -28,7 +28,7 @@ O código foi desenvolvido para ser simples e modular, permitindo a fácil integ
 
 ## 🧵 Modelo de ligação
 <p align="center">
-  <img alt="" src="./wokwi.jpg" width="40%">
+  <img alt="" src="./wokwi.png" width="60%">
 </p>
 <p align="center">
   <img alt="" src="./circuit.jpg" width="40%">
