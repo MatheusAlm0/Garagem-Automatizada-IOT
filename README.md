@@ -1,4 +1,4 @@
-<h1 align="center"> Projeto Casa Automatizada IOT </h1>
+<h1 align="center"> Projeto Garagem Automatizada IOT </h1>
 
 <p align="center">
 Projeto com foco em automação, sistemas embarcados e circuitos físicos<br/>
