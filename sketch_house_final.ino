@@ -42,7 +42,7 @@ void setup() {
     pinMode(ledPin1, OUTPUT);       
 
     servoBase2.attach(servoPin2);   
-    servoBase2.write(180);  // Inicia o servo invertido em 180 graus
+    servoBase2.write(180);  
     pinMode(trigPin2, OUTPUT);      
     pinMode(echoPin2, INPUT);       
     pinMode(ledPin2, OUTPUT);       
@@ -75,7 +75,7 @@ void setup() {
 
     server.on("/servo2", HTTP_GET, [](AsyncWebServerRequest *request) {
         commandServo2Active = true; 
-        servoBase2.write(60);  // Inverte para 0 graus ao invés de 180
+        servoBase2.write(60);  
         digitalWrite(ledPin2, HIGH);  
         digitalWrite(ledPin4, HIGH);  
         request->send(200, "text/plain", "Servo 2 acionado e permanecerá em 0 graus.");
@@ -89,7 +89,7 @@ void setup() {
     });
 
     server.on("/servo2off", HTTP_GET, [](AsyncWebServerRequest *request) {
-        servoBase2.write(180);  // Retorna para 180 graus ao invés de 0
+        servoBase2.write(180);  
         digitalWrite(ledPin2, LOW);  
         request->send(200, "text/plain", "Servo 2 retornou ao estado inicial.");
         commandServo2Active = false; 
@@ -168,14 +168,14 @@ void handleSerialCommands() {
 
         } else if (comando == "servo2") {
             commandServo2Active = true; 
-            servoBase2.write(60);  // Inverte para 0 graus
+            servoBase2.write(60);  
             digitalWrite(ledPin2, HIGH);  
             digitalWrite(ledPin4, HIGH);  
             Serial.println("Servo 2 acionado e permanecerá em 0 graus.");
 
         } else if (comando == "servo2off") {
             commandServo2Active = false;  
-            servoBase2.write(180);  // Retorna para 180 graus
+            servoBase2.write(180);  
             digitalWrite(ledPin2, LOW);  
             Serial.println("Servo 2 retornou ao estado inicial.");
         }
@@ -183,11 +183,9 @@ void handleSerialCommands() {
 }
 
 void handleUltrasonicSensors() {
-    // Apenas permita leituras automáticas se os servos não estiverem sendo controlados manualmente
     if (!commandServo1Active) {
         long duration1, distance1;
 
-        // Disparo do primeiro sensor ultrassônico
         digitalWrite(trigPin1, LOW);
         delayMicroseconds(2);
         digitalWrite(trigPin1, HIGH);
@@ -198,59 +196,54 @@ void handleUltrasonicSensors() {
         duration1 = pulseIn(echoPin1, HIGH, 30000);
 
         if (duration1 == 0) {
-            distance1 = -1;  // Nenhuma leitura válida foi feita (eco não detectado)
+            distance1 = -1;  
         } else {
             distance1 = (duration1 * 0.034) / 2;
         }
 
-        // Reduz a distância de operação para 2 cm
         if (distance1 > 0 && distance1 <= 2 && !servo1Active) {
-            servoBase1.write(120);  // Movimento do servo
-            digitalWrite(ledPin1, HIGH);  // Ligação do LED
-            digitalWrite(ledPin3, HIGH);  // Liga LED adicional
-            servo1StartTime = millis();  // Marca o início do tempo
+            servoBase1.write(120);  
+            digitalWrite(ledPin1, HIGH);  
+            digitalWrite(ledPin3, HIGH);  
+            servo1StartTime = millis();  
             servo1Active = true;
             Serial.println("Sensor servo 1 ativou");
         } else if (servo1Active && (millis() - servo1StartTime >= 5000)) {
-            servo1Active = false;  // Desativa o servo após 5 segundos
-            servoBase1.write(0);  // Retorna à posição inicial
+            servo1Active = false;  
+            servoBase1.write(0);  
             digitalWrite(ledPin1, LOW);
             digitalWrite(ledPin3, LOW);
             Serial.println("Sensor servo 1 desativou");
         }
     }
-
-    // Apenas permita leituras automáticas se o servo2 não estiver sendo controlado manualmente
+    
     if (!commandServo2Active) {
         long duration2, distance2;
 
-        // Disparo do segundo sensor ultrassônico
         digitalWrite(trigPin2, LOW);
         delayMicroseconds(2);
         digitalWrite(trigPin2, HIGH);
         delayMicroseconds(10);
         digitalWrite(trigPin2, LOW);
 
-        // Leitura do eco com um timeout de 30 ms
         duration2 = pulseIn(echoPin2, HIGH, 30000);
 
         if (duration2 == 0) {
-            distance2 = -1;  // Nenhuma leitura válida foi feita (eco não detectado)
+            distance2 = -1; 
         } else {
             distance2 = (duration2 * 0.034) / 2;
         }
 
-        // Reduz a distância de operação para 1 cm
         if (distance2 > 0 && distance2 <= 2 && !servo2Active) {
-            servoBase2.write(60);  // Movimento do servo
-            digitalWrite(ledPin2, HIGH);  // Ligação do LED
-            digitalWrite(ledPin4, HIGH);  // Liga LED adicional
-            servo2StartTime = millis();  // Marca o início do tempo
+            servoBase2.write(60); 
+            digitalWrite(ledPin2, HIGH);  
+            digitalWrite(ledPin4, HIGH);  
+            servo2StartTime = millis();  
             servo2Active = true;
             Serial.println("Sensor servo 2 ativou");
         } else if (servo2Active && (millis() - servo2StartTime >= 5000)) {
-            servo2Active = false;  // Desativa o servo após 5 segundos
-            servoBase2.write(180);  // Retorna à posição inicial
+            servo2Active = false;  
+            servoBase2.write(180);  
             digitalWrite(ledPin2, LOW);
             digitalWrite(ledPin4, LOW);
             Serial.println("Sensor servo 2 desativou");
